@@ -1,5 +1,5 @@
 # Altered Version of Adafruit FONA Library
-The code in this repository is an improved version of the Adafruit FONA library which adds LTE functionality for the SIM7000 module specifically for Dialog NB-IoT
+The code in this repository is an improved version of the Adafruit FONA library which adds LTE functionality for the SIM7000 module specifically for Dialog NB-IoT and CAT-M(eMTC)
 The text below is from the original Adafruit FONA library:
 
 ------------------------------------------
