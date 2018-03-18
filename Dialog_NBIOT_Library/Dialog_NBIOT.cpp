@@ -1,3 +1,10 @@
+/* Dialog NB-IOT, CAT-M fuctions are integrated. This is a redistribution of Adafruit Fona library
+Both MQTT and HTTP protocols are supported.*/
+
+
+
+
+
 /***************************************************
   This is a library for our Adafruit FONA Cellular Module
 
@@ -14,11 +21,8 @@
   Written by Limor Fried/Ladyada for Adafruit Industries.
   BSD license, all text above must be included in any redistribution
  ****************************************************/
-    // next line per http://postwarrior.com/arduino-ethershield-error-prog_char-does-not-name-a-type/
 
 #include "Dialog_NBIOT.h"
-
-
 
 
 Adafruit_FONA::Adafruit_FONA(int8_t rst)
