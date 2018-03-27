@@ -1,10 +1,3 @@
-/* Dialog NB-IOT, CAT-M fuctions are integrated. This is a redistribution of Adafruit Fona library
-Both MQTT and HTTP protocols are supported.*/
-
-
-
-
-
 /***************************************************
   This is a library for our Adafruit FONA Cellular Module
 
@@ -21,8 +14,11 @@ Both MQTT and HTTP protocols are supported.*/
   Written by Limor Fried/Ladyada for Adafruit Industries.
   BSD license, all text above must be included in any redistribution
  ****************************************************/
+    // next line per http://postwarrior.com/arduino-ethershield-error-prog_char-does-not-name-a-type/
 
 #include "Dialog_NBIOT.h"
+
+
 
 
 Adafruit_FONA::Adafruit_FONA(int8_t rst)
@@ -43,7 +39,6 @@ uint8_t Adafruit_FONA::type(void) {
 }
 
 
-
 /*********nb-IoT*************************************************************/
 boolean Adafruit_FONA::connectDialogNBIoT() {
   if(! sendCheckReply(F("AT+CNMP=38"), ok_reply))
@@ -58,6 +53,8 @@ boolean Adafruit_FONA::connectDialogNBIoT() {
  return true;
 }
 
+/*********CAT-M*************************************************************/
+
 boolean Adafruit_FONA::connectDialog_eMTC() {
   if(! sendCheckReply(F("AT+CNMP=38"), ok_reply))
     return false;
@@ -66,6 +63,8 @@ boolean Adafruit_FONA::connectDialog_eMTC() {
   DEBUG_PRINTLN(F("\neMTC(CAT-M) configuration done...."));
   return true;
   }
+
+  /*********CAT-M*************************************************************/
 
 
 uint16_t  Adafruit_FONA::getBattPercent(void) {
@@ -88,6 +87,7 @@ uint8_t Adafruit_FONA::getMode(void) {
   sendParseReply(F("AT+CNMP?"), F("+CNMP: "),&mode,',',0);
   return mode;
 }
+
 /******mode selection LTE/GSM*******/
 
 /******mode selection CAT-M/nb-IoT*******/
@@ -118,9 +118,6 @@ boolean Adafruit_FONA::connectDialogGsm() {
  return true;
 }
 /*********gsm **********/
-
-
-
 /*********nb-IoT**********/
 
 
@@ -356,7 +353,6 @@ uint8_t Adafruit_FONA::getRSSI(void) {
 
   return reply;
 }
-
 
 
 /********* TIME **********************************************************/
@@ -920,8 +916,8 @@ boolean Adafruit_FONA::enableGPRS(boolean onoff) {
       return false;
 
     // close bearer
-    if (! sendCheckReply(F("AT+SAPBR=0,1"), ok_reply, 10000))
-      return false;
+    // if (! sendCheckReply(F("AT+SAPBR=0,1"), ok_reply, 10000))
+    //   return false;
 
   	// if (_type < FONA_LTE_A) { // UNCOMMENT FOR 4G ONLY!
 	    if (! sendCheckReply(F("AT+CGATT=0"), ok_reply, 10000))
@@ -1059,7 +1055,6 @@ boolean Adafruit_FONA::getGSMLoc(float *lat, float *lon) {
 
 boolean Adafruit_FONA::postData(const char *request_type, const char *URL, char *body, const char *token) {
   // NOTE: Need to open socket/enable GPRS before using this function
-
   // Make sure HTTP service is terminated so initialization will run
   sendCheckReply(F("AT+HTTPTERM"), ok_reply, 10000);
 
@@ -1068,8 +1063,8 @@ boolean Adafruit_FONA::postData(const char *request_type, const char *URL, char 
     return false;
 
   // Set HTTP parameters
-  if (! sendCheckReply(F("AT+HTTPPARA=\"CID\",1"), ok_reply, 10000))
-    return false;
+//  if (! sendCheckReply(F("AT+HTTPPARA=\"CID\",1"), ok_reply, 10000))
+  //  return false;
 
   // Specify URL
   char auxStr[64];
@@ -1093,7 +1088,9 @@ boolean Adafruit_FONA::postData(const char *request_type, const char *URL, char 
 	  		return false;
 	  }
 
-		sprintf(auxStr, "AT+HTTPDATA=%d,10000", strlen(body));
+		//sprintf(auxStr, "AT+HTTPDATA=%d,10000", strlen(body));
+    sprintf(auxStr, "AT+HTTPDATA=84,10000", strlen(body));
+
 		if (! sendCheckReply(auxStr, "DOWNLOAD", 10000))
 	    return false;
 

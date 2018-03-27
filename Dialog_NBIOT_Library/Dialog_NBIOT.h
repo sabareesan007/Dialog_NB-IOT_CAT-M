@@ -14,9 +14,6 @@
   Written by Limor Fried/Ladyada for Adafruit Industries.
   BSD license, all text above must be included in any redistribution
  ****************************************************/
-
- //This Library is modified by Dialog ideamart to support NBIOT/CAT-M & GSM
- 
 #ifndef ADAFRUIT_FONA_H
 #define ADAFRUIT_FONA_H
 
@@ -39,6 +36,28 @@
 #define FONA_LTE_C 8
 #define FONA_LTE_E 9
 
+// Set the preferred SMS storage.
+//   Use "SM" for storage on the SIM.
+//   Use "ME" for internal storage on the FONA chip
+#define FONA_PREF_SMS_STORAGE "\"SM\""
+//#define FONA_PREF_SMS_STORAGE "\"ME\""
+
+#define FONA_HEADSETAUDIO 0
+#define FONA_EXTAUDIO 1
+
+#define FONA_STTONE_DIALTONE 1
+#define FONA_STTONE_BUSY 2
+#define FONA_STTONE_CONGESTION 3
+#define FONA_STTONE_PATHACK 4
+#define FONA_STTONE_DROPPED 5
+#define FONA_STTONE_ERROR 6
+#define FONA_STTONE_CALLWAIT 7
+#define FONA_STTONE_RINGING 8
+#define FONA_STTONE_BEEP 16
+#define FONA_STTONE_POSTONE 17
+#define FONA_STTONE_ERRTONE 18
+#define FONA_STTONE_INDIANDIALTONE 19
+#define FONA_STTONE_USADIALTONE 20
 
 #define FONA_DEFAULT_TIMEOUT_MS 500
 #define FONA_NO_RST_PIN 99
@@ -47,6 +66,11 @@
 #define FONA_HTTP_POST  1
 #define FONA_HTTP_HEAD  2
 
+#define FONA_CALL_READY 0
+#define FONA_CALL_FAILED 1
+#define FONA_CALL_UNKNOWN 2
+#define FONA_CALL_RINGING 3
+#define FONA_CALL_INPROGRESS 4
 
 class Adafruit_FONA : public FONAStreamType {
  public:
@@ -56,15 +80,14 @@ class Adafruit_FONA : public FONAStreamType {
 
 
   //nb-IOT
-
   boolean connectDialogGsm();
   boolean connectDialogNBIoT();
-  boolean connectDialog_eMTC();
   uint8_t getNB_IoT_status(void);
   uint8_t getMode(void);       //CNMO
   uint8_t getBandMode(void);  //CMNB
   uint8_t getfullstatus(void);
   uint16_t getBattPercent(void);
+  boolean Adafruit_FONA::connectDialog_eMTC();
 //  char* getFullNetStatus(void);
 
   // Stream
@@ -95,6 +118,31 @@ class Adafruit_FONA : public FONAStreamType {
 
   // IMEI
   uint8_t getIMEI(char *imei);
+
+  // set Audio output
+  boolean setAudio(uint8_t a);
+  boolean setVolume(uint8_t i);
+  uint8_t getVolume(void);
+  boolean playToolkitTone(uint8_t t, uint16_t len);
+  boolean setMicVolume(uint8_t a, uint8_t level);
+  boolean playDTMF(char tone);
+
+  // FM radio functions.
+  boolean tuneFMradio(uint16_t station);
+  boolean FMradio(boolean onoff, uint8_t a = FONA_HEADSETAUDIO);
+  boolean setFMVolume(uint8_t i);
+  int8_t getFMVolume();
+  int8_t getFMSignalLevel(uint16_t station);
+
+  // SMS handling
+  boolean setSMSInterrupt(uint8_t i);
+  uint8_t getSMSInterrupt(void);
+  int8_t getNumSMS(void);
+  boolean readSMS(uint8_t i, char *smsbuff, uint16_t max, uint16_t *readsize);
+  boolean sendSMS(char *smsaddr, char *smsmsg);
+  boolean deleteSMS(uint8_t i);
+  boolean getSMSSender(uint8_t i, char *sender, int senderlen);
+  boolean sendUSSD(char *ussdmsg, char *ussdbuff, uint16_t maxlen, uint16_t *readlen);
 
   // Time
   boolean enableNetworkTimeSync(boolean onoff);
